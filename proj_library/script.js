@@ -25,6 +25,8 @@ function delBook(i) {
 
 function showLibrary() {
     let info = document.getElementById("empty-table");
+    let tbody = document.getElementById("tbody");
+    tbody.innerHTML = "";
     if (myLibrary.length === 0) {
         if (!info) {
             let info = document.createElement("p");
@@ -39,9 +41,6 @@ function showLibrary() {
     if (info) {
         info.hidden = true;
     }
-
-    let tbody = document.getElementById("tbody");
-    tbody.innerHTML = "";
 
     myLibrary.forEach((book, i) => {
         let tdIdx = document.createElement("td");
