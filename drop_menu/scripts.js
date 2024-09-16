@@ -4,8 +4,12 @@ drop_btns.forEach((drop_btn)=>{drop_btn.addEventListener('click', (e) => drop_me
 function drop_menu_toggle(e) {
 
   const contents = document.querySelectorAll('.drop_menu_content');
-  contents.forEach((content) => content.classList.remove('drop_menu_show'));
   const id = e.target.id.split('_').at(-1);
+  contents.forEach((content) => {
+    if (content.id !== `drop_menu_content_${id}`) {
+        content.classList.remove('drop_menu_show');
+    }
+});
   let content = document.getElementById(`drop_menu_content_${id}`);
   content.classList.toggle('drop_menu_show');
 }
