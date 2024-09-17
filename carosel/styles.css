@@ -3,22 +3,35 @@ body {
 }
 
 #carosel_container {
+    position: relative;
     display: flex;
-    justify-content: center;
     align-items: center;
+    overflow: hidden;
+    width: 500px;
+    height: 500px;
+}
+
+.carosel_btns {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: xx-large;
+    color: white;
+    z-index: 2;
+    box-sizing: border-box;
+    padding: 20px;
 }
 
 .carosel_dots {
+    position: absolute;
     display: flex;
     justify-content: center;
+    width: 100%;
     gap: 20px;
     color: white;
-    margin-top: -30px;
-}
-.carosel_box {
-    max-width: 500px;
-    max-height: 500px;
-    overflow: hidden;
+    margin-top: 400px;
+    z-index: 2;
 }
 
 .carosel_base {
@@ -26,15 +39,8 @@ body {
     gap: 10px;
 }
 
-.carosel_box img {
+.carosel_base img {
     width: 500px;
     height: 500px;
     object-fit: cover;
-}
-
-.carosel_btn {
-    font-size: xx-large;
-    color: white;
-    margin: -30px;
-    z-index: 2;
 }
