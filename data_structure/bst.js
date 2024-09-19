@@ -77,6 +77,7 @@ const Tree = () => {
   };
 
   const levelOrder = (callback) => {
+    if (typeof callback !== "function") throw new Error("callback should be a function.")
     if (_root === null) return;
     let nodes = [];
     nodes.push(_root);
@@ -95,6 +96,7 @@ const Tree = () => {
   };
 
   const inOrder = (callback) => {
+    if (typeof callback !== "function") throw new Error("callback should be a function.")
     if (_root === null) return;
     inOrderHelper(callback, _root);
   };
@@ -106,6 +108,7 @@ const Tree = () => {
   };
 
   const preOrder = (callback) => {
+    if (typeof callback !== "function") throw new Error("callback should be a function.")
     if (_root === null) return;
     preOrderHelper(callback, _root);
   };
@@ -117,6 +120,7 @@ const Tree = () => {
   };
 
   const postOrder = (callback) => {
+    if (typeof callback !== "function") throw new Error("callback should be a function.")
     if (_root === null) return;
     postOrderHelper(callback, _root);
   };
@@ -178,4 +182,20 @@ const Tree = () => {
     let list = toList();
     buildTree(list);
   };
+
+  return {
+    buildTree,
+    prettyPrint,
+    insert,
+    deleteItem,
+    find,
+    levelOrder,
+    inOrder,
+    preOrder,
+    postOrder,
+    height,
+    depth,
+    isBalanced,
+    rebalance
+  }
 };
