@@ -14,11 +14,12 @@ const Tree = () => {
   };
 
   const buildTree = (array) => {
+    _root = null;
     let list = Array.from(new Set(array)).sort((a, b) => a - b);
     buildTreeHelper(list, 0, list.length - 1);
   };
 
-  const prettyPrint = (node, prefix = "", isLeft = true) => {
+  const prettyPrint = (node = _root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
@@ -199,3 +200,56 @@ const Tree = () => {
     rebalance
   }
 };
+
+const generateRandomArray = (length, max) => {
+  return Array.from({ length }, () => Math.floor(Math.random() * max));
+};
+
+const testBST = () => {
+  let randomNumbers = generateRandomArray(10, 100);
+  console.log("Random Array:", randomNumbers);
+  const bst = Tree();
+  bst.buildTree(randomNumbers);
+
+  console.log("Is tree balanced? ", bst.isBalanced());
+
+  console.log("Pretty print:");
+  console.log(bst.prettyPrint());
+
+  console.log("Level Order:");
+  bst.levelOrder(node => console.log(node.data));
+
+  console.log("Preorder:");
+  bst.preOrder(node => console.log(node.data));
+
+  console.log("Inorder:");
+  bst.inOrder(node => console.log(node.data));
+
+  console.log("Postorder:");
+  bst.postOrder(node => console.log(node.data));
+
+  [101, 102, 150, 200, 250].forEach(num => bst.insert(num));
+
+  console.log("Is tree balanced after adding large numbers? ", bst.isBalanced());
+
+  bst.rebalance();
+
+  console.log("Is tree balanced after rebalance? ", bst.isBalanced());
+
+  console.log("Pretty print:");
+  console.log(bst.prettyPrint());
+
+  console.log("Level Order after rebalance:");
+  bst.levelOrder(node => console.log(node.data));
+
+  console.log("Preorder after rebalance:");
+  bst.preOrder(node => console.log(node.data));
+
+  console.log("Inorder after rebalance:");
+  bst.inOrder(node => console.log(node.data));
+
+  console.log("Postorder after rebalance:");
+  bst.postOrder(node => console.log(node.data));
+};
+
+testBST();
