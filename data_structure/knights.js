@@ -1,6 +1,7 @@
 const Point = (list) => {
   let _x = list[0];
   let _y = list[1];
+  let _prev = null;
 
   const getX = () => {
     return _x;
@@ -10,48 +11,27 @@ const Point = (list) => {
     return _y;
   };
 
+  const getPrev = () => {
+    return _prev;
+  }
+
   const toList = () => {
     return [_x, _y];
   };
 
-  return { getX, getY, toList };
-};
+  const toStr = () => {
+    return `${_x}-${_y}`;
+  }
 
-const Square = () => {
-  let _steps = null;
-  let _isVisited = false;
-  let _prevPosition = null;
-
-  const getPrevPosition = () => {
-    return _prevPosition;
+  const setPrev = (p) => {
+    _prev = p;
   };
 
-  const canVisit = (steps) => {
-    return !_isVisited || _steps > steps;
-  };
-
-  const setVisited = (steps, prevPosition) => {
-    _isVisited = true;
-    _steps = steps;
-    _prevPosition = prevPosition;
-  };
-
-  return { getPrevPosition, canVisit, setVisited };
+  return { getX, getY, getPrev, toList, toStr, setPrev };
 };
 
 const Board = (length) => {
   const _length = length;
-  let _board = [];
-
-  const _init = () => {
-    _board = [];
-    for (let i = 0; i < length; i++) {
-      _board.push([]);
-      for (let j = 0; j < length; j++) {
-        _board[i].push(Square());
-      }
-    }
-  };
 
   const isValidPoint = (list) => {
     return list[0] < 0 ||
@@ -62,13 +42,7 @@ const Board = (length) => {
       : true;
   };
 
-  const square = (point) => {
-    return _board[point.getX()][point.getY()];
-  };
-
-  _init();
-
-  return { isValidPoint, square };
+  return { isValidPoint};
 };
 
 const Game = (start, target) => {
@@ -80,33 +54,32 @@ const Game = (start, target) => {
   const _target = Point(target);
 
   const play = () => {
-    _board.square(_start).setVisited(0, null);
-    _move(_start, 0);
-    return _generateReturn();
-  }
-
-  const _generateReturn = () => {
-    let list = [];
-    let curr = _target;
-    while (curr !== null) {
-        list.push(curr.toList());
-        curr = _board.square(curr).getPrevPosition();
-    }
-    return list.reverse();
-  }
-
-  const _move = (curr, steps) => {
-    if (curr === null) return;
-    let possibleNextPositions = _generateNext(curr);
-    steps++;
-    while (possibleNextPositions.length) {
-        let next = possibleNextPositions.pop()
-        let nextSquare = _board.square(next);
-        if (nextSquare.canVisit(steps)) {
-            nextSquare.setVisited(steps, curr);
-            _move(next, steps);
+    let visited = new Set();
+    let queue = [];
+    queue.push(_start);
+    while (queue.length) {
+        let curr = queue.shift();
+        let possibleNextPositions = _generateNext(curr);
+        while (possibleNextPositions.length) {
+            let next = possibleNextPositions.pop();
+            if (!visited.has(next.toStr())) {
+                visited.add(next.toStr());
+                next.setPrev(curr);
+                queue.push(next);
+                if (next.toStr() === _target.toStr()) return _generateReturn(next);
+            }
         }
     }
+    throw new Error("Can't find a path to target point.");
+  }
+
+  const _generateReturn = (curr) => {
+    let list = [];
+    while (curr !== null) {
+        list.push(curr.toList());
+        curr = curr.getPrev();
+    }
+    return list.reverse();
   }
 
   const _generateNext = (start) => {
